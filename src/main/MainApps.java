@@ -20,7 +20,8 @@ public class MainApps {
         Timestamp time = new Timestamp(System.currentTimeMillis());
         System.out.println(time);
         TransaksiDao transaksiDao = new TransaksiDao();
-        transaksiDao.addTransaksi(time);
+        transaksiDao.findAll();
+//        transaksiDao.addTransaksi(time);
     }
 
 }
