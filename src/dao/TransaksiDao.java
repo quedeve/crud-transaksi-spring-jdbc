@@ -38,7 +38,10 @@ public class TransaksiDao {
                 new BeanPropertyRowMapper(Transaksi.class));
         return listTransaksi;
     }
-
+       public Map<String, Object> findAllJoin() {
+    
+    }
+ 
     public int addTransaksi(Timestamp waktu) {
         String sql = "INSERT INTO tb_Transaksi VALUES(:waktu)";
         Map<String, Timestamp> paramMap = new HashMap<String, Timestamp>();
@@ -53,12 +56,21 @@ public class TransaksiDao {
         paramMap.put("id", transaksi.getId());
         return namedJdbcTemplate.update(sql, paramMap);
     }
-    
-    public int deleteTransaksi(Transaksi transaksi){
+
+    public int deleteTransaksi(Transaksi transaksi) {
         String sql = "DELETE tb_Transaksi WHERE Id=:id";
         Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put("id", transaksi.getId());
         return namedJdbcTemplate.update(sql, paramMap);
     }
+
+    public Transaksi findById(int id) {
+        Map<String, Object> param = new HashMap<String, Object>();
+        param.put("id", id);
+        return (Transaksi) namedJdbcTemplate
+                .queryForObject("SELECT Id as id, Waktu as waktu FROM tb_Transaksi where Id = :id ",
+                        param, new BeanPropertyRowMapper(Transaksi.class));
+    }
+    
 
 }

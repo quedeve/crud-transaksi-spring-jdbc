@@ -26,8 +26,15 @@ public class TransaksiDetailDao {
     
     public List<TransaksiDetail> findAll() {
         List<TransaksiDetail> listTransaksiDetail = jdbcTemplate.query("SELECT Id as id, IdTransaksi as idTransaksi, Item as item, Qty as qty, Price as price FROM TransaksiDetail",
-                new BeanPropertyRowMapper(TransaksiDao.class));
+                new BeanPropertyRowMapper(TransaksiDetail.class));
         return listTransaksiDetail;
+    }
+     public TransaksiDetail findById(int id) {
+        Map<String, Object> param = new HashMap<String, Object>();
+        param.put("id", id);
+        return (TransaksiDetail) namedJdbcTemplate
+                .queryForObject("SELECT Id as id, IdTransaksi as idTransaksi, Item as item, Qty as qty, Price as price FROM TransaksiDetail WHERE Id=:id",
+                        param, new BeanPropertyRowMapper(TransaksiDetail.class));
     }
 
     public int addTransaksiDao(TransaksiDetail transaksiDetail) {
