@@ -1,0 +1,7 @@
+config\Konfigurasi.class
+main\MainApps.class
+dao\TransaksiDetailDao.class
+dao\TransaksiDao.class
+.netbeans_automatic_build
+model\Transaksi.class
+model\TransaksiDetail.class
