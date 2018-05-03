@@ -5,13 +5,18 @@
  */
 package config;
 
+import java.util.Properties;
 import javax.sql.DataSource;
+import model.Transaksi;
+import model.TransaksiDetail;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.orm.hibernate5.HibernateTransactionManager;
+import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 
 /**
  *
@@ -21,6 +26,34 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 @ComponentScan(basePackages = {"dao"})
 public class Konfigurasi {
 
+    @Bean
+    public LocalSessionFactoryBean getSessionFactoryBean(){
+        LocalSessionFactoryBean factoryBean = new LocalSessionFactoryBean();
+        factoryBean.setDataSource(dataSource());
+        
+        Properties props = new Properties();
+        props.put("hibernate.show_sql", true);
+        props.put("hibernate.dialect", "org.hibernate.dialect.SQLServerDialect");
+        props.put("hibernate.hbm2ddl.auto", "update");
+        
+        factoryBean.setHibernateProperties(props);
+        //Ini untuk 1 kelas
+        factoryBean.setAnnotatedClasses(Transaksi.class);
+        //ini utnuk lebih dari 1 kelas
+//        factoryBean.setAnnotatedClasses(Transaksi.class, TransaksiDetail.class);
+        //ini untuk 1 package atau folder class
+        //factoryBean.setAnnotatedPackages("model");
+        
+        return factoryBean;
+    }
+    
+    @Bean
+    public HibernateTransactionManager getTransactionManager(){
+        HibernateTransactionManager transactionManager = new HibernateTransactionManager();
+        transactionManager.setSessionFactory(getSessionFactoryBean().getObject());
+        return transactionManager;
+    }
+    
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
